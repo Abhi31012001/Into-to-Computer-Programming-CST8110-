@@ -1,0 +1,189 @@
+//Name:Patel Abhi,Section: 322,Teacher: Fedor Ilitchev
+import java.util.Scanner;
+import java.text.DecimalFormat;
+
+public class Student {
+	 long studNumber;
+     String firstName;
+     String lastName;
+     double[] marks;
+     double totalMarks;
+     double totalBonus;
+     double gpa;
+     static final int NUMBER_MARKS = 3;
+     Scanner input;
+     DecimalFormat df = new DecimalFormat("#.##");
+     
+ 	public Student() {
+                 
+ 				 marks = new double[NUMBER_MARKS];
+                 input = new Scanner(System.in);
+ }
+ 	 public void readStudentDetails() {
+          
+          	System.out.print("Enter Student Number: ");
+          	studNumber=input.nextLong();
+          	while(studNumber<=0) {
+          		System.out.println("Enter proper number.Please re-enter Student Number ");
+          		System.out.print("Enter Student Number: ");
+              	studNumber=input.nextLong();
+          	}
+          
+          	System.out.print("Enter First Name:");
+          	firstName=input.next();
+          
+          	System.out.print("Enter Last Name:");
+          	lastName=input.next();
+          
+          	readMarks();
+            int numberOfBonuses = 0;
+          	do {
+                      
+                  System.out.print("Enter No. of Bonuses (should not be greater than 5): ");
+                  numberOfBonuses = input.nextInt();
+                  
+                          if(numberOfBonuses <= 5) 
+                          {
+                                          
+                                 break;
+                          }
+                          else {
+                                 System.out.println("\nInvalid No. of Bonuses entered! Please enter No. of bonuses less than or equal to 5 only!");
+                               }
+          }
+          while(true);
+          readBonuses(numberOfBonuses);
+}
+ 
+      private void readMarks() {
+                
+                 	totalMarks = 0;
+                    for(int i=0 ; i<NUMBER_MARKS ; i++) {
+                                 
+                                 	do {
+                                           System.out.print("Enter The Marks "+(i+1)+ ":");
+                                           marks[i] = input.nextDouble();
+                                           if(marks[i] >= 0 && marks[i] <= 100 ) {
+                                               
+                                                         break;
+                                                 }
+                                                 else {
+                                                                 
+                                                 	System.out.println("\n Marks are not valid. Enter marks between 0 and 100 ");
+                                                 }
+                                 }
+                                 while(true);
+                                 totalMarks = totalMarks + marks[i];
+                 }
+ }
+
+    private void convertBonus() {
+                 
+                 if(totalBonus>15) {
+                                 totalBonus=15;
+                                 }
+                 totalBonus=(totalBonus/15) * 2 ;                              
+ }
+
+ 
+ private void readBonuses(int numberOfBonuses) {
+                 
+                 totalBonus = 0.0;
+                 for(int i=1 ; i<=numberOfBonuses ; i++) {
+                                 System.out.print("Enter bonus "+i+": ");
+                                 double bonus = input.nextDouble();
+                                 totalBonus = totalBonus + bonus;
+                 }
+ }
+ 
+   private double calculatePercentage() {
+                 return (totalMarks / (NUMBER_MARKS * 100)) * 100;
+                 }
+
+ 
+   public void calculateGpa() {
+	   
+	                convertBonus();
+                    totalMarks=totalMarks+ totalBonus;
+                    gpa = (totalMarks / (NUMBER_MARKS * 100)) * 4;
+                    if (gpa>4) {
+                                 gpa=4;
+                                 }
+                 
+                 for(int i=0 ; i<NUMBER_MARKS ; i++) {
+                	 if(!checkEligibility()) {
+                                                 
+                                                gpa = 0;
+                                                break;
+                                                }
+                 }
+                
+ }
+
+
+    private boolean checkEligibility() {
+                 
+              
+                 for(int i=0 ; i<NUMBER_MARKS ; i++) {
+                                 
+                                 if(marks[i] < 33) {
+                                	 return false;
+                                 }
+                 }
+                 return true;
+ }
+
+ 
+   private String findGradeLetter() {
+	   									String grade = null;
+                                        if(checkEligibility()==false) {
+                                        grade = "F";
+                                        }
+                 else {
+                                 
+                                 if(gpa >= 3.0 && gpa <= 4.0) {
+                                                 grade = "A+";
+                                 }
+                                 else if(gpa >= 3.0 && gpa < 3.5) {
+                                                 grade = "A-";
+                                 }
+                                 
+                                else if(gpa >= 2.5 && gpa < 3.0) {
+                                                 grade = "B+";
+                                 }
+                                 else if(gpa >= 2.0 && gpa < 2.5) {
+                                                 grade = "B-";
+                                        
+                                 }
+                                 else if (gpa >=1.5 && gpa < 2.0) {
+                                 grade = "C+";
+                                 }
+                                 else if (gpa >=1.0 && gpa < 1.5 ) {
+                                 grade = "C-";
+                                 }
+                 }
+                 
+                 return grade;
+ }
+
+ 
+
+   public void displayStudentDetails() {
+	   DecimalFormat df = new DecimalFormat("#.##");
+	   
+       System.out.print(studNumber
++ "\t\t|   \t"+firstName+" "+lastName +"\t	|\t"+df.format(totalMarks)+"\t\t|\t"+df.format(gpa) +"\t|\t"+findGradeLetter()+"\t\t|\t");
+
+              	
+                 if(checkEligibility()==false) {
+                                 System.out.println("NOTE: Failed in one or more courses");
+                 }
+                 else {
+                                 System.out.println();
+                 }
+ }
+
+
+}
+
+
